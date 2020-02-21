@@ -11,6 +11,8 @@ data "google_container_engine_versions" "engine_version" {
   location                  = var.zone
 }
 
+# Query my Terraform service account from GCP
+data "google_client_config" "current" {}
 resource "google_container_cluster" "primary" {
   provider                  = google-beta
   name                      = var.name
@@ -21,8 +23,12 @@ resource "google_container_cluster" "primary" {
   remove_default_node_pool  = "true"
   project                   = var.project
   default_max_pods_per_node = var.default_max_pods_per_node
-  min_master_version        = data.google_container_engine_versions.engine_version.latest_master_version
-  node_version              = data.google_container_engine_versions.engine_version.latest_node_version
+  #min_master_version        = data.google_container_engine_versions.engine_version.latest_master_version
+  min_master_version          = var.min_cluster_version
+  //posible destruct terraform plan with Error: Get http://localhost/version?timeout=32s: dial tcp [::1]:80: connect: connection refused
+  #enable_kubernetes_alpha   = true
+
+//  node_version              = data.google_container_engine_versions.engine_version.latest_node_version
 
   addons_config {
     kubernetes_dashboard {

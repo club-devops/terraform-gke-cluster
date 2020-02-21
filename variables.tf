@@ -16,6 +16,7 @@ variable "zone" {
   description = "The zone the master and nodes specified in initial_node_count should be created in"
 }
 
+variable "min_cluster_version" {}
 variable "disable_dashboard" {
   description = "Whether the Kubernetes Dashboard should be disabled"
   default     = false
